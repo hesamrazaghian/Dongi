@@ -1,4 +1,6 @@
-﻿public class PersonSelectionItemViewModel
+﻿namespace Dongi.ViewModels;
+
+public class PersonSelectionItemViewModel
 {
     public int PersonId { get; set; }
     public string DisplayName { get; set; } = string.Empty;
