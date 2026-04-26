@@ -13,12 +13,18 @@ public class PersonService : IPersonService
 
     public async Task<Person> GetOrCreateCurrentPersonAsync( string userId )
     {
-        var person = await _context.Persons.FirstOrDefaultAsync(p => p.UserId == userId);
+        var person = await _context.Persons
+        .FirstOrDefaultAsync(p => p.UserId == userId);
 
         if( person != null )
             return person;
 
-        person = new Person { UserId = userId };
+        person = new Person
+        {
+            UserId = userId,
+            DisplayName = "User Display Name"
+        };
+
         _context.Persons.Add( person );
         await _context.SaveChangesAsync( );
 

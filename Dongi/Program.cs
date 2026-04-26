@@ -17,6 +17,7 @@ namespace Dongi
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddScoped<IEventService, EventService>( );
+            builder.Services.AddScoped<IPersonService, PersonService>( );
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
