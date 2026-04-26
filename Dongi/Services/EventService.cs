@@ -1,5 +1,6 @@
 ﻿using Dongi.Data;
 using Dongi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dongi.Services
 {
@@ -37,6 +38,19 @@ namespace Dongi.Services
             await _context.SaveChangesAsync( );
 
             return ev.Id;
+        }
+
+        public async Task<List<Event>> GetMyEventsAsync( string userId )
+        {
+            var person = await _personService.GetOrCreateCurrentPersonAsync( userId );
+            return ( await _context.EventPersons.Where( ep => ep.PersonId == person.Id ).Select( ep => ep.Event ).Distinct( ).ToListAsync( )); 
+        }
+
+        public async Task<Event?> GetEventDetailsAsync( int eventId, string userId )
+        {
+            var person = await _personService.GetOrCreateCurrentPersonAsync( userId );
+
+            return ( await _context.EventPersons.Where( ep => ep.EventId == eventId && ep.PersonId == person.Id ).Select( ep => ep.Event ).FirstOrDefaultAsync( ));
         }
     }
 }

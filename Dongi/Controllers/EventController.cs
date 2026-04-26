@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
+
 namespace Dongi.Controllers
 {
     [Authorize]
@@ -38,5 +39,45 @@ namespace Dongi.Controllers
 
             return RedirectToAction( "Index", "Home" );
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Index( )
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if( userId == null )
+                return Challenge( );
+
+            var events = await _eventService.GetMyEventsAsync(userId);
+
+            var model = events.Select(e => new MyEventListItemViewModel
+            {
+                Id = e.Id,
+                Title = e.Title
+            }).ToList();
+
+            return View( model );
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details( int id )
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if( userId == null )
+                return Challenge( );
+
+            var ev = await _eventService.GetEventDetailsAsync(id, userId);
+            if( ev == null )
+                return NotFound( );
+
+            var model = new EventDetailsViewModel
+            {
+                Id = ev.Id,
+                Title = ev.Title
+            };
+
+            return View( model );
+        }
+
     }
 }
