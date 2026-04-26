@@ -13,6 +13,9 @@ namespace Dongi.Models
         [Required]
         public int PersonId { get; set; }
 
+        [Required]
+        public int ShareAmount { get; set; }
+
         public Expense Expense { get; set; } = null!;
         public Person Person { get; set; } = null!;
     }
